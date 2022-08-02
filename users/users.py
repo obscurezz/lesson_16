@@ -9,9 +9,10 @@ users_blueprint = Blueprint('users', __name__)
 
 @users_blueprint.route('/users', methods=['GET', 'POST'])
 def select_all_users():
+    # post method/insert
     if request.method == 'POST':
-        req = request.get_json()
-        new_user = User(**req)
+        req: dict = request.get_json()
+        new_user: User = User(**req)
         db.session.add(new_user)
         try:
             db.session.commit()
@@ -22,7 +23,7 @@ def select_all_users():
                     'error': str(e),
                     'status_code': 500
                     }, 500
-
+    # get method/select
     else:
         query = [u._as_dict() for u in User.query.all()]
         return jsonify(query), 200
@@ -30,10 +31,10 @@ def select_all_users():
 
 @users_blueprint.route('/users/<int:pk>', methods=['GET', 'PUT', 'DELETE'])
 def select_user_by_pk(pk: int):
-    user = User.query.get(pk)
-
+    user: User = User.query.get(pk)
+    # put method/update
     if request.method == 'PUT':
-        req = request.get_json()
+        req: dict = request.get_json()
         for k in req:
             setattr(user, k, req[k])
         try:
@@ -45,7 +46,7 @@ def select_user_by_pk(pk: int):
                     'error': str(e),
                     'status_code': 500
                     }, 500
-
+    # delete method/delete
     elif request.method == 'DELETE':
         db.session.delete(user)
         try:
@@ -60,6 +61,6 @@ def select_user_by_pk(pk: int):
                     'error': str(e),
                     'status_code': 500
                     }, 500
-
+    # get method/select
     else:
         return jsonify(user._as_dict()), 200

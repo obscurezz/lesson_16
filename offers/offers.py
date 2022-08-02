@@ -9,9 +9,10 @@ offers_blueprint = Blueprint('offers', __name__)
 
 @offers_blueprint.route('/offers', methods=['GET', 'POST'])
 def select_all_offers():
+    # post method/insert
     if request.method == 'POST':
-        req = request.get_json()
-        new_offer = Offer(**req)
+        req: dict = request.get_json()
+        new_offer: Offer = Offer(**req)
         db.session.add(new_offer)
         try:
             db.session.commit()
@@ -22,7 +23,7 @@ def select_all_offers():
                        'error': str(e),
                        'status_code': 500
                    }, 500
-
+    # get method/select
     else:
         query = [o._as_dict() for o in Offer.query.all()]
         return jsonify(query), 200
@@ -30,10 +31,10 @@ def select_all_offers():
 
 @offers_blueprint.route('/offers/<int:pk>', methods=['GET', 'PUT', 'DELETE'])
 def select_offer_by_pk(pk: int):
-    offer = Offer.query.get(pk)
-
+    offer: Offer = Offer.query.get(pk)
+    # put method/update
     if request.method == 'PUT':
-        req = request.get_json()
+        req: dict = request.get_json()
         for k in req:
             setattr(offer, k, req[k])
         try:
@@ -45,7 +46,7 @@ def select_offer_by_pk(pk: int):
                     'error': str(e),
                     'status_code': 500
                     }, 500
-
+    # delete method/delete
     elif request.method == 'DELETE':
         db.session.delete(offer)
         try:
@@ -60,6 +61,6 @@ def select_offer_by_pk(pk: int):
                     'error': str(e),
                     'status_code': 500
                     }, 500
-
+    # get method/select
     else:
         return jsonify(offer._as_dict()), 200

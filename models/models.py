@@ -4,7 +4,9 @@ db = SQLAlchemy()
 
 
 class User(db.Model):
-
+    """
+    model for table User, id as PK
+    """
     def _as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
@@ -18,7 +20,9 @@ class User(db.Model):
 
 
 class Offer(db.Model):
-
+    """
+    model for table Offer, id as PK, foreigns for order and user
+    """
     def _as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
@@ -28,7 +32,9 @@ class Offer(db.Model):
 
 
 class Order(db.Model):
-
+    """
+    model for table Order, id as PK, foreigns for user and offer executor
+    """
     def _as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 

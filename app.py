@@ -29,7 +29,7 @@ def create_app() -> Flask:
     return app
 
 
-def setup_database(app: Flask):
+def setup_database(app: Flask) -> None:
     with app.app_context():
         db.drop_all()
         db.create_all()
